@@ -1,0 +1,558 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Prototype_Company.GUI;
+
+import java.sql.*;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import java.util.Collections;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
+
+
+public class CurrentOrders extends javax.swing.JFrame {
+
+   
+    //id searcher for MoreInfo button
+    public boolean searchID(ArrayList id, int key){
+       boolean temp = false;
+       for (int i = 0; i < id.size(); i++) {
+           if(id.get(i).equals(key)){
+               temp = true;
+           }
+       }
+       return temp;
+   }
+    
+   
+   public CurrentOrders()  {
+        initComponents();
+        try{
+           Connection conn = DriverManager.getConnection("jdbc:h2:C:\\Users\\kneiv\\ArtTranssc_database" , "root" , "Pokemon123");
+           Statement stmt = conn.createStatement();
+           ArrayList Components = new ArrayList();
+           
+           
+           int OrderID = 0; String OrderidQuery = "Select orderid from orders";
+           String 
+                   pName , ProductName = "select name from product natural\n" +
+"join orders where orderid > 0", 
+                  cName, CustomerName = "select Firstname from Customer natural\n" +
+"join orders where orderid > 0";
+           
+           int amount = 0; String amountQuery = "select amount from orders where orderid > 0";
+           double price = 1.0; String priceQuery = "select price from product natural\n" +
+"join orders where orderid > 0";
+           
+           int colnum = 0;
+           int rownum = 0;
+           
+           //Fetch orderid into the table
+           ResultSet execute = stmt.executeQuery(OrderidQuery);
+           while(execute.next()){
+               OrderID = execute.getInt("orderid");
+              COTable.setValueAt(OrderID, rownum, colnum);
+              rownum++;
+             }
+            colnum++;
+           rownum = 0;
+          
+           //Fetch CustomerName into the table
+           execute = stmt.executeQuery(CustomerName);
+           while(execute.next()){
+               cName = execute.getString("FirstName");
+               COTable.setValueAt(cName, rownum, colnum);
+               rownum++;
+           }
+           
+           colnum++;
+           rownum = 0;
+         
+           //Fetch ProductName into the table 
+           execute = stmt.executeQuery(ProductName);
+           while(execute.next()){
+               pName = execute.getString("name");
+               COTable.setValueAt(pName, rownum, colnum);
+               rownum++;
+           }
+          
+           colnum++;
+           rownum = 0;
+           
+           //Fetch amount in tonnes into the table
+           execute = stmt.executeQuery(amountQuery);
+           while(execute.next()){
+               amount = execute.getInt("amount");
+               String temp1 = String.valueOf(amount+ " Ton");
+               COTable.setValueAt(temp1, rownum, colnum);
+               rownum++;
+           }
+           
+           colnum++;
+           rownum = 0;
+           
+           //Fetch price and calculate finalCost of order
+           execute = stmt.executeQuery(priceQuery);
+           while(execute.next()){
+               
+               //fetching and conversion
+               price = execute.getDouble("price");
+               String temp2 = String.valueOf(COTable.getValueAt(rownum, colnum-1));
+               temp2 = String.valueOf(temp2.substring(0,2));
+               System.out.println(temp2);
+               int constant = Integer.parseInt(temp2);
+               
+               //calculation
+               double finalPrice = price*constant;
+               
+               String temp3 = String.valueOf(finalPrice + " Zlotych");
+               
+               //setting value
+               COTable.setValueAt(temp3, rownum, colnum);
+               rownum++;
+           }
+           
+           String getTotalProfit = "Select * from profit";
+           
+           execute = stmt.executeQuery(getTotalProfit);
+           double totalProfit = 0;
+           //formatting a decimal
+           DecimalFormat df = new DecimalFormat("#,###.#");
+           
+           while(execute.next()){
+               totalProfit += execute.getDouble("Profit");
+               df.format(totalProfit);
+           }
+           //inputting a value
+           profit.setText("Profit : " + totalProfit);
+           
+        }
+        //error handling
+        catch(Exception e){
+            System.out.println(e);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        COTable = new javax.swing.JTable();
+        Title_orders = new javax.swing.JLabel();
+        BackButton = new javax.swing.JButton();
+        MoreInfo = new javax.swing.JButton();
+        id = new javax.swing.JTextField();
+        ProfitEndOrder = new javax.swing.JToggleButton();
+        profit = new javax.swing.JLabel();
+        reset = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        COTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Order ID", "Customer", "Product", "Amount", "Price"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        COTable.setRequestFocusEnabled(false);
+        COTable.setRowHeight(17);
+        jScrollPane1.setViewportView(COTable);
+
+        Title_orders.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        Title_orders.setText("Aktualne Zamówienia");
+
+        BackButton.setText("Powrót");
+        BackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackButtonActionPerformed(evt);
+            }
+        });
+
+        MoreInfo.setText("Wiecej informacji");
+        MoreInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MoreInfoActionPerformed(evt);
+            }
+        });
+
+        id.setText("ID");
+        id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idActionPerformed(evt);
+            }
+        });
+
+        ProfitEndOrder.setSelected(true);
+        ProfitEndOrder.setText("Zakoncz zamówienie");
+        ProfitEndOrder.setToolTipText("");
+        ProfitEndOrder.setActionCommand("Zako?cz zamowienie");
+        ProfitEndOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ProfitEndOrderActionPerformed(evt);
+            }
+        });
+
+        profit.setText("Profit : ");
+
+        reset.setText("Reset");
+        reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(MoreInfo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ProfitEndOrder)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 180, Short.MAX_VALUE)
+                .addComponent(Title_orders)
+                .addGap(192, 192, 192)
+                .addComponent(reset)
+                .addGap(18, 18, 18)
+                .addComponent(profit)
+                .addGap(117, 117, 117)
+                .addComponent(BackButton)
+                .addContainerGap())
+            .addComponent(jScrollPane1)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Title_orders)
+                    .addComponent(BackButton)
+                    .addComponent(MoreInfo)
+                    .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ProfitEndOrder)
+                    .addComponent(profit)
+                    .addComponent(reset))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
+        dispose();
+        
+    }//GEN-LAST:event_BackButtonActionPerformed
+
+    private void getMoreInfo(ArrayList orderid){
+         try{
+           Connection conn = DriverManager.getConnection("jdbc:h2:C:\\Users\\kneiv\\ArtTranssc_database" , "root" , "Pokemon123");
+           Statement stmt = conn.createStatement();
+        
+        String sql = "select orderid from orders";
+        
+        ResultSet execute = stmt.executeQuery(sql);
+        // fetch orderid
+        while(execute.next()){
+           orderid.add(execute.getInt("orderid"));
+        }             
+        conn.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        
+        System.out.println(orderid);
+       
+        
+        //error handling
+        if (id.getText().equals("")||searchID(orderid,Integer.parseInt(id.getText())) == false){
+             JOptionPane.showMessageDialog(null, "Bledne dane, prosze wpisz poprawne id");
+        }
+        else{
+        try{
+           Connection conn = DriverManager.getConnection("jdbc:h2:C:\\Users\\kneiv\\ArtTranssc_database" , "root" , "Pokemon123");
+           Statement stmt = conn.createStatement();
+            int ID = Integer.parseInt(id.getText());
+            
+            //fetch info from order table and insert it into the arraylist
+            String sql1 = "select orderid, start_date, end_date, amount from orders where orderid = " + ID;
+            ArrayList informations = new ArrayList();
+            ResultSet execute = stmt.executeQuery(sql1);
+            
+            while(execute.next()){
+                informations.add("ID zamowienia: " + execute.getInt("orderid"));
+                System.out.println(informations);
+                informations.add("Data poczatkowa: " + execute.getString("start_date"));
+                System.out.println(informations);
+                informations.add("Data koncowa: " + execute.getString("end_date"));
+                System.out.println(informations);
+                informations.add("Ilosc: " + execute.getInt("amount"));
+                System.out.println(informations);
+                
+                        
+            }
+       
+        //temporarly fetch deliverer id to gain access to the employeee and car table
+        String sql2 = "select delivererid from orders where orderid = " + ID;
+        int tempdID = 0;
+        execute = stmt.executeQuery(sql2);
+        while(execute.next()){
+             tempdID = execute.getInt("delivererid");
+             System.out.println(tempdID);
+        }
+        
+        //Fetch temp carid
+        String tempcar = "select carid from deliverer where delivererid = " + tempdID;
+        int tempcarID = 0;
+        execute = stmt.executeQuery(tempcar);
+        while(execute.next()){
+            tempcarID = execute.getInt("carid");
+            System.out.println(tempcarID);
+        }
+        
+        //fetch info about deliverer from employee and car tables
+        String sql3 = "select employee.employeeid, firstname, lastname, phone, deliverer.carid, model, registration, status  from deliverer natural "
+                + "join employee join car  where delivererid = " + tempdID + "and car.carid = " + tempcarID;
+        execute = stmt.executeQuery(sql3);
+        while(execute.next()){
+            informations.add("ID pracownika: " + execute.getInt("employeeid"));
+            informations.add("Imie: " + execute.getString("firstname"));
+            informations.add("Nazwisko: " + execute.getString("lastname"));
+            informations.add("Numer Telefonu: " + execute.getString("phone"));
+            informations.add("ID pojazu: " + execute.getString("carid"));
+            informations.add("Model pojazdu: " + execute.getString("model"));
+            informations.add("Rejestracja: " + execute.getString("registration"));
+            System.out.println(informations);
+            //converting car status
+            if(execute.getBoolean("status") == true){
+                informations.add("Status: Sprawny");
+            }
+            else informations.add("Status: W naprawie");
+        }
+        
+        //fetching informations on customer from customer table
+        String sql4 = "select orders.customerid, customer.firstname, customer.lastname, phone, address from orders natural "
+                + "join customer where orders.orderid = " + ID;
+        execute = stmt.executeQuery(sql4);
+        while (execute.next()){
+            informations.add("ID klienta: " + execute.getInt("customerid"));
+            informations.add("Imie: " + execute.getString("firstname"));
+            informations.add("Nazwisko: " + execute.getString("lastname"));
+            informations.add("Numer Telefonu: " + execute.getString("phone"));
+            informations.add("Adres: " + execute.getString("address"));
+        }
+            //set up a moreinfo prompt
+        String moreinfo;
+        moreinfo = informations.get(0).toString() + "\n" + informations.get(1).toString() + " " + informations.get(2).toString() + "\n" + informations.get(3).toString() +" Tony" + "\n"
+                + "\n" +  informations.get(4).toString() + "\n" +  informations.get(5).toString() + "\n" + informations.get(6).toString() + "\n" + informations.get(7).toString() + "\n" + "\n" + informations.get(8).toString() + "\n" 
+                + informations.get(9).toString() + "\n" + informations.get(10).toString() + "\n" + informations.get(11).toString() + "\n" + "\n" + informations.get(12).toString() + "\n" 
+                + informations.get(13).toString()+ "\n" + informations.get(14).toString() + "\n" + informations.get(15).toString() + "\n" + informations.get(16).toString();
+            System.out.println(moreinfo);
+        JOptionPane.showMessageDialog(null, moreinfo);
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        
+        
+        }
+    }
+    private void MoreInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreInfoActionPerformed
+        ArrayList orderid = new ArrayList();
+        getMoreInfo(orderid);
+        
+    }//GEN-LAST:event_MoreInfoActionPerformed
+
+    private void idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idActionPerformed
+
+    private void ProfitEndOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProfitEndOrderActionPerformed
+        
+        int amount; 
+        double priceConstant;
+        double finalPrice = 0;
+        
+        //retrieve needed id
+        int orderid = Integer.parseInt(id.getText());
+        String deleteOrder = "delete from orders where orderid = " + orderid;
+        System.out.println(deleteOrder);
+        
+        String getamount = "Select amount from orders where orderid = " + orderid;
+        String getconstant = "Select price from product natural join orders where orderid = " + orderid;
+        
+        
+        
+        //connection
+        try{
+           Connection conn = DriverManager.getConnection("jdbc:h2:C:\\Users\\kneiv\\ArtTranssc_database" , "root" , "Pokemon123");
+           Statement stmt = conn.createStatement();
+        
+       ResultSet execute = stmt.executeQuery(getamount);
+       
+       while(execute.next()){
+           amount = execute.getInt("amount");
+           finalPrice = amount;
+       }
+      
+      execute = stmt.executeQuery(getconstant);
+      
+      //insert profits into table
+      while(execute.next()){
+          priceConstant = execute.getDouble("price");
+          finalPrice = finalPrice * priceConstant;
+          
+          String pricesql = "insert into profit values (" + finalPrice+ ")";
+          System.out.println(pricesql);
+          
+         conn.createStatement().execute(pricesql);
+         
+         
+      }
+      
+    
+         //Delete finished order;
+         
+         stmt.execute(deleteOrder);
+         
+         //Refresh function
+         CurrentOrders refresh= new CurrentOrders();
+           this.dispose();
+           refresh.setVisible(rootPaneCheckingEnabled);
+           refresh.setTitle("ArtTranssc Delivery Manager");
+       
+     
+        }
+        
+        
+        
+        catch(Exception e){
+            System.out.println(e);
+        }
+       
+        
+    }//GEN-LAST:event_ProfitEndOrderActionPerformed
+
+    private void resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetActionPerformed
+      String sql = "delete from profit";
+      
+      try{
+           Connection conn = DriverManager.getConnection("jdbc:h2:C:\\Users\\kneiv\\ArtTranssc_database" , "root" , "Pokemon123");
+           Statement stmt = conn.createStatement();
+           
+           stmt.execute(sql);
+           //Refresh
+           
+           CurrentOrders refresh= new CurrentOrders();
+           this.dispose();
+           refresh.setVisible(rootPaneCheckingEnabled);
+           refresh.setTitle("ArtTranssc Delivery Manager");
+      }
+      
+      catch(Exception e){
+          System.out.println(e);
+      }
+    }//GEN-LAST:event_resetActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CurrentOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CurrentOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CurrentOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CurrentOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CurrentOrders().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BackButton;
+    private javax.swing.JTable COTable;
+    private javax.swing.JButton MoreInfo;
+    private javax.swing.JToggleButton ProfitEndOrder;
+    private javax.swing.JLabel Title_orders;
+    private javax.swing.JTextField id;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel profit;
+    private javax.swing.JButton reset;
+    // End of variables declaration//GEN-END:variables
+}
